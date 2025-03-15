@@ -24,8 +24,8 @@ class Detector(
     private val labelPath: String,
     private val detectorListener: DetectorListener,
 ) {
-
-    private var interpreter: Interpreter
+    //EJU6.2114
+    private var interpreter: Interpreter? = null
     private var labels = mutableListOf<String>()
 
     private var tensorWidth = 0
@@ -38,39 +38,47 @@ class Detector(
         .add(CastOp(INPUT_IMAGE_TYPE))
         .build()
 
-    init {
-        val compatList = CompatibilityList()
+    fun setup(isGpu: Boolean = true) {
 
-        val options = Interpreter.Options().apply{
-            if(compatList.isDelegateSupportedOnThisDevice){
-                val delegateOptions = compatList.bestOptionsForThisDevice
-                this.addDelegate(GpuDelegate(delegateOptions))
-            } else {
+        if (interpreter != null) {
+            close()
+        }
+
+        val options = if (isGpu) {
+            val compatList = CompatibilityList()
+
+            Interpreter.Options().apply{
+                if(compatList.isDelegateSupportedOnThisDevice){
+                    val delegateOptions = compatList.bestOptionsForThisDevice
+                    this.addDelegate(GpuDelegate(delegateOptions))
+                } else {
+                    this.setNumThreads(4)
+                }
+            }
+        } else {
+            Interpreter.Options().apply{
                 this.setNumThreads(4)
             }
         }
 
+
         val model = FileUtil.loadMappedFile(context, modelPath)
         interpreter = Interpreter(model, options)
 
-        val inputShape = interpreter.getInputTensor(0)?.shape()
-        val outputShape = interpreter.getOutputTensor(0)?.shape()
+        val inputShape = interpreter?.getInputTensor(0)?.shape() ?: return
+        val outputShape = interpreter?.getOutputTensor(0)?.shape() ?: return
 
-        if (inputShape != null) {
-            tensorWidth = inputShape[1]
-            tensorHeight = inputShape[2]
+        tensorWidth = inputShape[1]
+        tensorHeight = inputShape[2]
 
-            // If in case input shape is in format of [1, 3, ..., ...]
-            if (inputShape[1] == 3) {
-                tensorWidth = inputShape[2]
-                tensorHeight = inputShape[3]
-            }
+        // If in case input shape is in format of [1, 3, ..., ...]
+        if (inputShape[1] == 3) {
+            tensorWidth = inputShape[2]
+            tensorHeight = inputShape[3]
         }
 
-        if (outputShape != null) {
-            numChannel = outputShape[1]
-            numElements = outputShape[2]
-        }
+        numChannel = outputShape[1]
+        numElements = outputShape[2]
 
         try {
             val inputStream: InputStream = context.assets.open(labelPath)
@@ -89,34 +97,13 @@ class Detector(
         }
     }
 
-    fun restart(isGpu: Boolean) {
-        interpreter.close()
-
-        val options = if (isGpu) {
-            val compatList = CompatibilityList()
-            Interpreter.Options().apply{
-                if(compatList.isDelegateSupportedOnThisDevice){
-                    val delegateOptions = compatList.bestOptionsForThisDevice
-                    this.addDelegate(GpuDelegate(delegateOptions))
-                } else {
-                    this.setNumThreads(4)
-                }
-            }
-        } else {
-            Interpreter.Options().apply{
-                this.setNumThreads(4)
-            }
-        }
-
-        val model = FileUtil.loadMappedFile(context, modelPath)
-        interpreter = Interpreter(model, options)
-    }
-
     fun close() {
-        interpreter.close()
+        interpreter?.close()
+        interpreter = null
     }
 
     fun detect(frame: Bitmap) {
+        interpreter ?: return
         if (tensorWidth == 0) return
         if (tensorHeight == 0) return
         if (numChannel == 0) return
@@ -132,7 +119,7 @@ class Detector(
         val imageBuffer = processedImage.buffer
 
         val output = TensorBuffer.createFixedSize(intArrayOf(1, numChannel, numElements), OUTPUT_IMAGE_TYPE)
-        interpreter.run(imageBuffer, output.buffer)
+        interpreter?.run(imageBuffer, output.buffer)
 
         val bestBoxes = bestBox(output.floatArray)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime

@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">YOLOv8 TfLite</string>
+    <string name="app_name">PotholeDetector</string>
     <string name="gpu">GPU</string>
+    <!-- to toggle the open close button of the navigation drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>
