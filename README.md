@@ -23,11 +23,14 @@
 
 ## Screenshots
 
-*Add screenshots here if you have any visuals for the app.*
-
----
 
 
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <img src="https://github.com/user-attachments/assets/98e1668e-18fb-467a-b63f-3d70ae9876c6" width="45%" />
+    <img src="https://github.com/user-attachments/assets/79443eea-ff7b-4b4a-bbd1-478afd0a2d57" width="45%" />
+    <img src="https://github.com/user-attachments/assets/1458605c-3abe-4404-9c92-82a488fa5947" width="45%" />
+    <img src="https://github.com/user-attachments/assets/573791f3-10ea-4414-9f26-ab4585c8aca4" width="45%" />
+</div>
 
 ### Steps
 
