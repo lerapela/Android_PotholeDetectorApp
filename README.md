@@ -64,7 +64,7 @@
 
 ## Credits
 
-This project was inspired by the work of **[Original Developer’s Name]** (GitHub: [@original-developer](https://github.com/original-developer)).
+This project was inspired by the work of  (GitHub: (https://github.com/surendramaran/YOLO)).
 
 I cloned and modified the original project to meet my needs for real-time pothole detection and road issue reporting.
 
