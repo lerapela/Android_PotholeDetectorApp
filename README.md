@@ -34,7 +34,7 @@
 
    Clone this project to your local machine:
    ```bash
-   git clone https://github.com/yourusername/pothole-detection-app.git
+   git clone https://github.com/lerapela/Android_PotholeDetectorApp.git
    ```
 
 2. **Setup Firebase:**
