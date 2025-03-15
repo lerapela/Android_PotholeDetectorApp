@@ -4,7 +4,8 @@
 
 # Pothole Detection & Road Management App
 
-**The Road Management System** is a real-time pothole detection system powered by YOLOv8. This app uses YOLOv8 to detect potholes. A website is also included to track detected potholes. Additionally, a Jupyter notebook is provided for training the model on custom data.
+**The Road Management System** is a real-time pothole detection system powered by YOLOv8. This app uses YOLOv8 to detect potholes. Additionally, a Jupyter notebook is provided for training the model on custom data.
+- Go to [Model Respiratory](https://github.com/lerapela/Yolov8PotholeDetectionTraining.git)
 
 
 ---
@@ -87,7 +88,6 @@ I cloned and modified the original project to meet my needs for real-time pothol
 -**Jupyter Notebook for Model Training:** A Jupyter notebook is provided to help you train the YOLOv8 model on custom data for pothole detection. Check the training/ directory for more details on how to fine-tune 
    the model for your specific use case.
 
--**Web-based Platform:** A web-based platform is available for government authorities to monitor detected road issues, track their status, and manage resolutions.
 
 
 ---
